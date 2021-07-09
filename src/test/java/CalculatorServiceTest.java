@@ -16,6 +16,7 @@ public class CalculatorServiceTest {
 
     private static String testBasicInput = "4,5\n5";
     private static String testExceptionIsNotOKInput = "4,5\n";
+    private static String testEmptyParamInput = "";
     private static String testDelimiterInput = "4,5\n6";
     private static String testInLineInput = "//;\n1;2";
     private static String testInNegativesInput = "//;\n4;-5\n-5";
@@ -28,6 +29,14 @@ public class CalculatorServiceTest {
     @Test
     public void testBasic() throws Exception {
         assertEquals(14, calculatorService.add(testBasicInput));
+    }
+
+    @Test
+    public void testEmptyParam() {
+        Exception thrown = assertThrows(Exception.class, () -> {
+            calculatorService.add(testEmptyParamInput);
+        });
+        assertTrue(thrown.getMessage().equals(CalculatorService.msgExeption));
     }
 
     @Test
