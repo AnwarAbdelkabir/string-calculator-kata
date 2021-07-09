@@ -6,13 +6,13 @@ import java.util.OptionalInt;
 public class CalculatorService {
 
     public static String msgExeption = "The input param is NOT ok";
+    private String defaultDelimiter = ",";
 
     public int add(String numbers) throws Exception {
-        String delimiter = ",";
         if (!numbers.isEmpty()) {
             // Step 4
             if (numbers.startsWith("//")) {
-                delimiter = numbers.split("\n")[0].trim().substring(2);
+                defaultDelimiter = numbers.split("\n")[0].trim().substring(2);
                 final int indexOfFirstN = numbers.indexOf("\n");
                 numbers = numbers.substring(indexOfFirstN + 1);
             }
@@ -20,9 +20,9 @@ public class CalculatorService {
             if (numbers.endsWith("\n")) {
                 throw new Exception(CalculatorService.msgExeption);
             } else {
-                numbers = numbers.replace("\n", delimiter);
+                numbers = numbers.replace("\n", defaultDelimiter);
             }
-            final String[] splitNumbers = numbers.split(delimiter);
+            final String[] splitNumbers = numbers.split(defaultDelimiter);
             // Step 5
             final OptionalInt optionalNegative = Arrays.stream(splitNumbers).mapToInt(s -> Integer.parseInt(s)).filter(s -> s < 0).findAny();
             if (optionalNegative.isPresent()) {
