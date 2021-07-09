@@ -1,5 +1,6 @@
 import kata.calculator.CalculatorService;
 import kata.calculator.NegativeParamExecption;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -13,39 +14,49 @@ public class CalculatorServiceTest {
 
     CalculatorService calculatorService = new CalculatorService();
 
+    private static String testBasicInput = "4,5\n5";
+    private static String testExceptionIsNotOKInput = "4,5\n";
+    private static String testDelimiterInput = "4,5\n6";
+    private static String testInLineInput = "//;\n1;2";
+    private static String testInNegativesInput = "//;\n4;-5\n-5";
+
+    @BeforeAll
+    public static void init() {
+        System.out.println("=========> Start CalculatorService'tests ...");
+    }
+
     @Test
     public void testBasic() throws Exception {
-        assertEquals(14, calculatorService.add("4,5\n5"));
+        assertEquals(14, calculatorService.add(testBasicInput));
     }
 
     @Test
     public void testExceptionIsNotOK() {
         Exception thrown = assertThrows(Exception.class, () -> {
-            calculatorService.add("4,5\n");
+            calculatorService.add(testExceptionIsNotOKInput);
         });
         assertTrue(thrown.getMessage().equals(CalculatorService.msgExeption));
     }
 
     @Test
     public void testDelimiter() throws Exception {
-        assertEquals(15, calculatorService.add("4,5\n6"));
+        assertEquals(15, calculatorService.add(testDelimiterInput));
     }
 
     @Test
     public void testInLine() throws Exception {
-        assertEquals(3, calculatorService.add("//;\n1;2"));
+        assertEquals(3, calculatorService.add(testInLineInput));
     }
 
     @Test
     public void testInNegatives() {
-        String input = "//;\n4;-5\n-5";
         NegativeParamExecption thrown = assertThrows(NegativeParamExecption.class, () -> {
-            calculatorService.add(input);
+            calculatorService.add(testInNegativesInput);
         });
 
-        String delimiter = input.split("\n")[0].trim().substring(2);
-        final int indexOfFirstN = input.indexOf("\n");
-        String cleanInput = input.substring(indexOfFirstN + 1).replace("\n", delimiter);
+        String delimiter = testInNegativesInput.split("\n")[0].trim().substring(2);
+        final int indexOfFirstN = testInNegativesInput.indexOf("\n");
+        String cleanInput = testInNegativesInput.substring(indexOfFirstN + 1).replace("\n", delimiter);
         final String[] splitInput = cleanInput.split(delimiter);
         final OptionalInt optionalNegative = Arrays.stream(splitInput).mapToInt(s -> Integer.parseInt(s)).filter(s -> s < 0).findAny();
         if (optionalNegative.isPresent()) {
