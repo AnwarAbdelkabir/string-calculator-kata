@@ -5,7 +5,9 @@ import java.util.OptionalInt;
 
 public class CalculatorService {
 
-    public int Add(String numbers) throws Exception {
+    public static String msgExeption = "The input param is NOT ok";
+
+    public int add(String numbers) throws Exception {
         String delimiter = ",";
         if (!numbers.isEmpty()) {
             // Step 4
@@ -16,7 +18,7 @@ public class CalculatorService {
             }
             // Step 3
             if (numbers.endsWith("\n")) {
-                throw new Exception("The input param is NOT ok");
+                throw new Exception(CalculatorService.msgExeption);
             } else {
                 numbers = numbers.replace("\n", delimiter);
             }
